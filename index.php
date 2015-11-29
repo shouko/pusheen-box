@@ -11,14 +11,24 @@ if(!isset($_POST["message"])){
 }
 $message = json_decode($_POST["message"], 1);
 if(!empty($message["attachments"]) && $message["attachments"][0]["type"] == "sticker"){
-	exit(json_encode(array("message" => array("sticker" => $message["attachments"][0]["stickerID"]), "threadID" => $message["threadID"])));
+	$result = array(
+		"message" => array(
+			"sticker" => $message["attachments"][0]["stickerID"]
+		),
+		"threadID" => $message["threadID"]
+	);
+	exit(json_encode($result));
 }
 $responses = array(
-		"who are you" => "我是 Pusheen!"
+		"who are you" => "我是 Pusheen!",
 		"*jump*" => array("sticker" => "144884852352448")
 	);
 if(isset($responses[$message["body"]])){
-	exit(json_encode(array("message" => $responses[$message["body"]], "threadID" => $message["threadID"])));
+	$result = array(
+		"message" => $responses[$message["body"]],
+		"threadID" => $message["threadID"]
+	);
+	exit(json_encode($result));
 }
 exit(json_encode(array("message" => utf8_strrev($message["body"]), "threadID" => $message["threadID"])));
 ?>
