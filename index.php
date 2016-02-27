@@ -38,7 +38,8 @@ switch($command[0]){
     $stmt->execute(array(
       ':in_id' => $data[':in_id'],
       ':in_type' => $data[':in_type'],
-      ':in_type' => $data[':pattern']
+      ':pattern' => $data[':pattern'],
+      ':out_body' => $command[2]
     ));
     $response['message'] = array(
       "body" => "我知道惹！你說 $command[1] 我說 $command[2]"
@@ -53,7 +54,7 @@ switch($command[0]){
     $stmt->execute(array(
       ':in_id' => $data[':in_id'],
       ':in_type' => $data[':in_type'],
-      ':in_type' => $data[':pattern']
+      ':pattern' => $data[':pattern']
     ));
     $response['message'] = array(
       "body" => "我知道惹！"
@@ -61,7 +62,6 @@ switch($command[0]){
     break;
   case "/query":
     $sql = "SELECT `pattern`, `out_body` FROM `pusheen_pattern` WHERE `in_id` = :in_id AND `in_type` = :in_type";
-    unset($data[':pattern']);
     $stmt = $db->prepare($sql);
     $stmt->execute(array(
       ':in_id' => $data[':in_id'],
@@ -91,8 +91,7 @@ switch($command[0]){
     $stmt = $db->prepare($sql);
     $stmt->execute(array(
       ':in_id' => $data[':in_id'],
-      ':in_type' => $data[':in_type'],
-      ':in_type' => $data[':pattern'],
+      ':pattern' => $data[':pattern'],
       ':sender_id' => $message['senderID']
     ));
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
