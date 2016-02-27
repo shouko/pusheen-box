@@ -2,17 +2,17 @@
 include 'lib.php';
 
 header("Content-type: application/json; charset=utf8");
-if(!isset($_POST["message"])){
+if(!isset($_POST['message'])){
 	http_response_code(400);
 	die();
 }
-$message = json_decode($_POST["message"], 1);
-if(!empty($message["attachments"]) && $message["attachments"][0]["type"] == "sticker"){
+$message = json_decode($_POST['message'], 1);
+if(!empty($message['attachments']) && $message['attachments'][0]['type'] == "sticker"){
 	$result = array(
 		"message" => array(
-			"sticker" => $message["attachments"][0]["stickerID"]
+			"sticker" => $message['attachments'][0]['stickerID']
 		),
-		"threadID" => $message["threadID"]
+		"threadID" => $message['threadID']
 	);
 	exit(json_encode($result));
 }
@@ -21,13 +21,13 @@ $global_responses = array(
 		"*jump*" => array("sticker" => "144884852352448")
 	);
 $db = getDatabaseConnection();
-$command = explode(" ", $message["body"]);
+$command = explode(" ", $message['body']);
 $data = array(
-  ':in_id' => $message["threadID"],
-  ':in_type' => $message["threadID"] == $message["senderID"] ? 1 : 0,
+  ':in_id' => $message['threadID'],
+  ':in_type' => $message['threadID'] == $message['senderID'] ? 1 : 0,
   ':pattern' => isset($command[1]) ? $command[1] : ""
 );
-$response = array("threadID" => $message["threadID"]);
+$response = array("threadID" => $message['threadID']);
 switch($command[0]){
   case "/add":
     if(count($command) < 3){
@@ -40,7 +40,7 @@ switch($command[0]){
       ':in_type' => $data[':in_type'],
       ':in_type' => $data[':pattern']
     ));
-    $response["message"] = array(
+    $response['message'] = array(
       "body" => "我知道惹！你說 $command[1] 我說 $command[2]"
     );
     break;
@@ -55,7 +55,7 @@ switch($command[0]){
       ':in_type' => $data[':in_type'],
       ':in_type' => $data[':pattern']
     ));
-    $response["message"] = array(
+    $response['message'] = array(
       "body" => "我知道惹！"
     );
     break;
@@ -69,22 +69,22 @@ switch($command[0]){
     ));
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     if(empty($result)){
-      $response["message"] = array(
+      $response['message'] = array(
         "body" => "我知道惹！"
       );
     }else{
-      $message["message"] = array(
+      $message['message'] = array(
         "body" => "以下是你的 pattern\n\n"
       );
       foreach($result as $row){
-        $message["message"]["body"] .= $row['pattern']." ".$row['body']."\n";
+        $message['message']['body'] .= $row['pattern']." ".$row['body']."\n";
       }
     }
     break;
   default:
-    if(isset($global_responses[$message["body"]])){
-      $response["message"] = array(
-        "body" => $global_responses[$message["body"]]
+    if(isset($global_responses[$message['body']])){
+      $response['message'] = array(
+        "body" => $global_responses[$message['body']]
       );
     }
     $sql = "SELECT `out_type`, `out_body` FROM `pusheen_pattern` WHERE `in_id` IN(:in_id, :sender_id) AND `pattern` = :pattern";
@@ -93,14 +93,14 @@ switch($command[0]){
       ':in_id' => $data[':in_id'],
       ':in_type' => $data[':in_type'],
       ':in_type' => $data[':pattern'],
-      ':sender_id' => $message["senderID"]
+      ':sender_id' => $message['senderID']
     ));
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     if(empty($result)){
       die("");
     }
-    $response["message"] = array(
-      $result["type"] => $result["body"]
+    $response['message'] = array(
+      $result['type'] => $result['body']
     );
 }
 exit(json_encode($response));
