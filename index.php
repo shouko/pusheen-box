@@ -1,8 +1,5 @@
 <?php
-function utf8_strrev($str){
- preg_match_all('/./us', $str, $ar);
- return implode(array_reverse($ar[0]));
-}
+include 'lib.php';
 
 header("Content-type: application/json; charset=utf8");
 if(!isset($_POST["message"])){
