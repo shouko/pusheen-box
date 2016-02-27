@@ -6,6 +6,7 @@ function utf8_strrev($str) {
 }
 
 function getDatabaseConnection(){
-  $dbconf = parse_url(getenv("DATABASE_URL"));
+  $dburl = getenv("DATABASE_URL") == "" ? 'mysql://pusheen:@localhost/pusheen' : getenv("DATABASE_URL");
+  $dbconf = parse_url($dburl);
   return new PDO("mysql:host=".$dbconf['host'].";dbname=".explode('/', $dbconf['path'])[1].";charset=utf8", $dbconf['user'], $dbconf['pass']);
 }
