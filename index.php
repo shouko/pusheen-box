@@ -28,6 +28,8 @@ $data = array(
 );
 if(isset($command[1])){
   $data[':pattern'] = $command[1];
+}else{
+  $data[':pattern'] = $command[0];
 }
 $response = array("threadID" => $message["threadID"]);
 switch($command[0]){
@@ -56,6 +58,7 @@ switch($command[0]){
     break;
   case "/query":
     $sql = "SELECT `pattern`, `out_body` FROM `pusheen_pattern` WHERE `id_id` = :id_in AND `in_type` = :in_type";
+    unset($data[':pattern']);
     $stmt = $db->prepare($sql);
     $stmt->execute($data);
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
