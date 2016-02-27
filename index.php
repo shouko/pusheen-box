@@ -79,6 +79,7 @@ switch($command[0]){
       );
     }
     $sql = "SELECT `out_type`, `out_body` FROM `pusheen_pattern` WHERE `in_id` IN(:in_id, :sender_id) AND `pattern` = :pattern";
+    unset($message[":in_type"]);
     $data[':sender_id'] = $message["senderID"];
     $stmt = $db->prepare($sql);
     $stmt->execute($data);
