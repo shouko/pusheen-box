@@ -24,13 +24,9 @@ $db = getDatabaseConnection();
 $command = explode(" ", $message["body"]);
 $data = array(
   ':in_id' => $message["threadID"],
-  ':in_type' => $message["threadID"] == $message["senderID"] ? 1 : 0
+  ':in_type' => $message["threadID"] == $message["senderID"] ? 1 : 0,
+  ':pattern' => isset($command[1]) ? $command[1] : ""
 );
-if(isset($command[1])){
-  $data[':pattern'] = $command[1];
-}else{
-  $data[':pattern'] = $command[0];
-}
 $response = array("threadID" => $message["threadID"]);
 switch($command[0]){
   case "/add":
@@ -39,8 +35,11 @@ switch($command[0]){
     }
     $sql = "INSERT INTO `pusheen_pattern` (`in_id`, `in_type`, `pattern`, `out_type`, `out_body`) VALUES (:in_id, :in_type, :pattern, 'body', :out_body)";
     $stmt = $db->prepare($sql);
-    $data[':out_body'] = $command[2];
-    $stmt->execute($data);
+    $stmt->execute(array(
+      ':in_id' => $data[':in_id'],
+      ':in_type' => $data[':in_type'],
+      ':in_type' => $data[':pattern']
+    ));
     $response["message"] = array(
       "body" => "我知道惹！你說 $command[1] 我說 $command[2]"
     );
@@ -51,7 +50,11 @@ switch($command[0]){
     }
     $sql = "DELETE FROM `pusheen_pattern` WHERE `in_id` = :in_id AND `in_type` = :in_type AND `pattern` = :pattern)";
     $stmt = $db->prepare($sql);
-    $stmt->execute($data);
+    $stmt->execute(array(
+      ':in_id' => $data[':in_id'],
+      ':in_type' => $data[':in_type'],
+      ':in_type' => $data[':pattern']
+    ));
     $response["message"] = array(
       "body" => "我知道惹！"
     );
@@ -60,7 +63,10 @@ switch($command[0]){
     $sql = "SELECT `pattern`, `out_body` FROM `pusheen_pattern` WHERE `in_id` = :in_id AND `in_type` = :in_type";
     unset($data[':pattern']);
     $stmt = $db->prepare($sql);
-    $stmt->execute($data);
+    $stmt->execute(array(
+      ':in_id' => $data[':in_id'],
+      ':in_type' => $data[':in_type']
+    ));
     $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
     if(empty($result)){
       $response["message"] = array(
@@ -82,10 +88,13 @@ switch($command[0]){
       );
     }
     $sql = "SELECT `out_type`, `out_body` FROM `pusheen_pattern` WHERE `in_id` IN(:in_id, :sender_id) AND `pattern` = :pattern";
-    unset($message[":in_type"]);
-    $data[':sender_id'] = $message["senderID"];
     $stmt = $db->prepare($sql);
-    $stmt->execute($data);
+    $stmt->execute(array(
+      ':in_id' => $data[':in_id'],
+      ':in_type' => $data[':in_type'],
+      ':in_type' => $data[':pattern'],
+      ':sender_id' => $message["senderID"]
+    ));
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     if(empty($result)){
       die("");
