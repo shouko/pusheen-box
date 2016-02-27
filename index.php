@@ -78,7 +78,8 @@ switch($command[0]){
         "body" => $global_responses[$message["body"]]
       );
     }
-    $sql = "SELECT `out_type`, `out_body` FROM `pusheen_pattern` WHERE `in_id` = :in_id AND `in_type` = :in_type AND `pattern` = :pattern";
+    $sql = "SELECT `out_type`, `out_body` FROM `pusheen_pattern` WHERE `in_id` IN(:in_id, :sender_id) AND `pattern` = :pattern";
+    $data[':sender_id'] = $message["senderID"];
     $stmt = $db->prepare($sql);
     $stmt->execute($data);
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
