@@ -12,5 +12,5 @@ function getDatabaseConnection(){
 }
 
 function getBotName(){
-  return (getenv("BOT_NAME") == "" ? " Pusheen" : getenv("BOT_NAME"));
+  return (getenv("BOT_NAME") == "" ? " Pusheen" : json_decode(getenv("BOT_NAME")));
 }
