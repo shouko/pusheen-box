@@ -11,8 +11,19 @@ if(!empty($message['attachments'])){
 	die("");
 }
 $global_responses = array(
-		"who are you" => "我是 Pusheen!",
-		"*jump*" => array("sticker" => "144884852352448")
+		"who are you" => "我是".getBotName()."!",
+		"*jump*" => array("sticker" => "144884852352448"),
+		"/help" => "你好！我是".getBotName()."
+我可以當你的好幫手 <3 以下是功能簡介
+
+/add A B
+你說 A 我說 B
+/del A
+刪除這條規則
+/query
+查詢現有規則
+/help
+顯示這份說明"
 	);
 $db = getDatabaseConnection();
 $command = explode(" ", $message['body']);
