@@ -7,14 +7,8 @@ if(!isset($_POST['message'])){
 	die();
 }
 $message = json_decode($_POST['message'], 1);
-if(!empty($message['attachments']) && $message['attachments'][0]['type'] == "sticker"){
-	$result = array(
-		"message" => array(
-			"sticker" => $message['attachments'][0]['stickerID']
-		),
-		"threadID" => $message['threadID']
-	);
-	exit(json_encode($result));
+if(!empty($message['attachments'])){
+	die("");
 }
 $global_responses = array(
 		"who are you" => "我是 Pusheen!",
