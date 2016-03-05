@@ -12,5 +12,10 @@ function getDatabaseConnection(){
 }
 
 function getBotName(){
-  return (getenv("BOT_NAME") == "" ? " Pusheen" : json_decode(getenv("BOT_NAME")));
+  $list = array(" Pusheen", "學代會本體");
+  if(isset($list[(int)getenv("BOT_ID")])){
+    return $list[(int)getenv("BOT_ID")];
+  }else{
+    return " Pusheen";
+  }
 }
