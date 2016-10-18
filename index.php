@@ -38,13 +38,14 @@ switch($command[0]){
     if(count($command) < 3){
       break;
     }
-    $sql = "INSERT INTO `pusheen_pattern` (`in_id`, `in_type`, `pattern`, `out_type`, `out_body`) VALUES (:in_id, :in_type, :pattern, 'body', :out_body)";
+    $sql = "INSERT INTO `pusheen_pattern` (`in_id`, `in_type`, `pattern`, `out_type`, `out_body`) VALUES (:in_id, :in_type, :pattern, :out_type, :out_body)";
     $stmt = $db->prepare($sql);
     $stmt->execute(array(
       ':in_id' => $data[':in_id'],
       ':in_type' => $data[':in_type'],
       ':pattern' => $data[':pattern'],
-      ':out_body' => $command[2]
+      ':out_body' => $command[2],
+      ':out_type' => filter_var($command[2], FILTER_VALIDATE_URL) ? 'url' : 'body'
     ));
     $response['message'] = array(
       "body" => "我知道惹！你說 $command[1] 我說 $command[2]"
