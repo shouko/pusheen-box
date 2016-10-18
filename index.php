@@ -88,9 +88,7 @@ switch($command[0]){
     break;
   default:
     if(isset($global_responses[$message['body']])){
-      $response['message'] = array(
-        "body" => $global_responses[$message['body']]
-      );
+      $response['message'] = $global_responses[$message['body']];
 			break;
     }
     $sql = "SELECT `out_type`, `out_body` FROM `pusheen_pattern` WHERE `in_id` IN(:in_id, :sender_id) AND `pattern` = :pattern";
