@@ -7,7 +7,7 @@ if(!isset($_POST['message'])){
 	die();
 }
 $message = json_decode($_POST['message'], 1);
-if(!empty($message['attachments'])){
+if(!isset($message['body'])){
 	die("");
 }
 $global_responses = array(
