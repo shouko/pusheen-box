@@ -55,6 +55,7 @@ switch($command[0]){
     if(count($command) < 2){
       break;
     }
+/*
     $sql = "DELETE FROM `pusheen_pattern` WHERE `in_id` = :in_id AND `in_type` = :in_type AND `pattern` = :pattern)";
     $stmt = $db->prepare($sql);
     $stmt->execute(array(
@@ -62,8 +63,9 @@ switch($command[0]){
       ':in_type' => $data[':in_type'],
       ':pattern' => $data[':pattern']
     ));
+*/
     $response['message'] = array(
-      "body" => "我知道惹！"
+      "body" => "還沒 implement，幫 QQ"
     );
     break;
   case "/query":
@@ -92,7 +94,7 @@ switch($command[0]){
       $response['message'] = $global_responses[$message['body']];
 			break;
     }
-    $sql = "SELECT `out_type`, `out_body` FROM `pusheen_pattern` WHERE `in_id` IN(:in_id, :sender_id) AND `pattern` = :pattern";
+    $sql = "SELECT `out_type`, `out_body` FROM `pusheen_pattern` WHERE `in_id` IN(:in_id, :sender_id) AND `pattern` = :pattern ORDER BY RAND() LIMIT 1";
     $stmt = $db->prepare($sql);
     $stmt->execute(array(
       ':in_id' => $data[':in_id'],
