@@ -89,6 +89,21 @@ switch($command[0]){
       }
     }
     break;
+  case "/weather":
+    $weather_api = 'http://weather.ntustudents.org/api';
+    $weather = json_decode(file_get_contents($weather_api));
+    $response['message'] = array(
+      "body" => sprintf(
+        "現在氣溫 %s °C\n今日氣溫 %s ~ %s °C\n風向 %s m/s %s °\n氣壓 %s hPa\n濕度 %s%\n降雨強度 %s mm/h\n本日降雨 %s mm\n\n%s\n%s",
+        $weather['temperature'],
+        $weather['temp_min'], $weather['temp_max'],
+        $weather['wind_speed'], $weather['wind_direction'],
+        $weather['pressure'],
+        $weather['humidity'],
+        $weather['rain'], $weather['rain_day'],
+        $weather['date'], $weather['provider']
+      )
+    );
   default:
     if(isset($global_responses[$message['body']])){
       $response['message'] = $global_responses[$message['body']];
