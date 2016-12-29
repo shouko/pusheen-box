@@ -104,6 +104,7 @@ switch($command[0]){
         $weather['date'], $weather['provider']
       )
     );
+    break;
   default:
     if(isset($global_responses[$message['body']])){
       $response['message'] = $global_responses[$message['body']];
