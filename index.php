@@ -45,7 +45,7 @@ switch($command[0]){
       ':in_type' => $data[':in_type'],
       ':pattern' => $data[':pattern'],
       ':out_body' => $command[2],
-      ':out_type' => filter_var($command[2], FILTER_VALIDATE_URL) ? 'url' : 'body'
+      ':out_type' => filter_var($command[2], FILTER_VALIDATE_URL) ? 'url' : (isset($command[3]) && $command[3] == 'sticker') ? 'sticker' : 'body'
     ));
     $response['message'] = array(
       "body" => "我知道惹！你說 $command[1] 我說 $command[2]"
