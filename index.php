@@ -55,11 +55,11 @@ switch($command[0]){
     if(count($command) < 2){
       break;
     }
-    $sql = "UPDATE `pusheen_pattern` SET `disabled` = 1 WHERE `in_id` = :in_id AND `id` = :pattern)";
+    $sql = "UPDATE `pusheen_pattern` SET `disabled` = 1 WHERE `in_id` = :in_id AND `id` = :id";
     $stmt = $db->prepare($sql);
     $stmt->execute(array(
       ':in_id' => $data[':in_id'],
-      ':pattern' => $data[':pattern']
+      ':id' => $data[':pattern']
     ));
     $response['message'] = array(
       "body" => "還沒 implement，幫 QQ"
