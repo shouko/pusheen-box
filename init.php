@@ -9,6 +9,7 @@ $db->query('CREATE TABLE `pusheen_pattern` (
   `pattern` varchar(30) NOT NULL,
   `out_type` varchar(30) NOT NULL,
   `out_body` varchar(255) NOT NULL,
+  `disabled` tinyint(4) DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;');
 

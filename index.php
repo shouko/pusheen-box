@@ -55,21 +55,18 @@ switch($command[0]){
     if(count($command) < 2){
       break;
     }
-/*
-    $sql = "DELETE FROM `pusheen_pattern` WHERE `in_id` = :in_id AND `in_type` = :in_type AND `pattern` = :pattern)";
+    $sql = "UPDATE `pusheen_pattern` SET `disabled` = 1 WHERE `in_id` = :in_id AND `id` = :pattern)";
     $stmt = $db->prepare($sql);
     $stmt->execute(array(
       ':in_id' => $data[':in_id'],
-      ':in_type' => $data[':in_type'],
       ':pattern' => $data[':pattern']
     ));
-*/
     $response['message'] = array(
       "body" => "還沒 implement，幫 QQ"
     );
     break;
   case "/query":
-    $sql = "SELECT `pattern`, `out_body` FROM `pusheen_pattern` WHERE `in_id` = :in_id AND `in_type` = :in_type";
+    $sql = "SELECT `pattern`, `out_body` FROM `pusheen_pattern` WHERE `in_id` = :in_id AND `in_type` = :in_type AND `disabled` = 0";
     $stmt = $db->prepare($sql);
     $stmt->execute(array(
       ':in_id' => $data[':in_id'],
@@ -85,7 +82,7 @@ switch($command[0]){
         "body" => "以下是你的 pattern\n\n"
       );
       foreach($result as $row){
-        $response['message']['body'] .= $row['pattern']." ".$row['out_body']."\n";
+        $response['message']['body'] .= $row['id']." ".$row['pattern']." ".$row['out_body']."\n";
       }
     }
     break;
@@ -110,7 +107,7 @@ switch($command[0]){
       $response['message'] = $global_responses[$message['body']];
 			break;
     }
-    $sql = "SELECT `out_type`, `out_body` FROM `pusheen_pattern` WHERE `in_id` IN(:in_id, :sender_id) AND `pattern` = :pattern ORDER BY RAND() LIMIT 1";
+    $sql = "SELECT `out_type`, `out_body` FROM `pusheen_pattern` WHERE `in_id` IN(:in_id, :sender_id) AND `pattern` = :pattern AND `disabled` = 0 ORDER BY RAND() LIMIT 1";
     $stmt = $db->prepare($sql);
     $stmt->execute(array(
       ':in_id' => $data[':in_id'],
