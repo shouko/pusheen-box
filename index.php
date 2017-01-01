@@ -66,7 +66,7 @@ switch($command[0]){
     );
     break;
   case "/query":
-    $sql = "SELECT `pattern`, `out_body` FROM `pusheen_pattern` WHERE `in_id` = :in_id AND `in_type` = :in_type AND `disabled` = 0";
+    $sql = "SELECT `id`, `pattern`, `out_body` FROM `pusheen_pattern` WHERE `in_id` = :in_id AND `in_type` = :in_type AND `disabled` = 0";
     $stmt = $db->prepare($sql);
     $stmt->execute(array(
       ':in_id' => $data[':in_id'],
