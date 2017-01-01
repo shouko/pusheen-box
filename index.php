@@ -62,7 +62,7 @@ switch($command[0]){
       ':id' => $data[':pattern']
     ));
     $response['message'] = array(
-      "body" => "還沒 implement，幫 QQ"
+      "body" => "我知道惹！"
     );
     break;
   case "/query":
